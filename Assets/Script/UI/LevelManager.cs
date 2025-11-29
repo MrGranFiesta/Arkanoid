@@ -1,7 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class LevelManager : MonoBehaviour
@@ -11,12 +9,14 @@ public class LevelManager : MonoBehaviour
     public void Awake()
     {
         _text = GetComponent<TextMeshProUGUI>();
+        //Crea escuchador de eventos
         GameManager.OnLevelChanged.AddListener(UpdateText);
-        _text.text = MainClass.getGameManager().Level.ToString();
+        //Inicializa
+        _text.text = GameManager.Level.ToString();
     }
 
     public void UpdateText(int text)
     {
-        this._text.text = text.ToString();
+        _text.text = text.ToString();
     }
 }

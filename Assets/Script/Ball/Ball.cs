@@ -1,24 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Ball : MonoBehaviour
 {
     [SerializeField] private StartedType type;
-    //private static bool isStartParty = false;
-
-    /*public bool IsStartParty
-    {
-        get { return isStartParty; }
-        set { isStartParty = value; }
-    }*/
+    private Rigidbody2D ballRigidbody2D;
 
     private void Awake()
     {
-        Rigidbody2D ballRigidbody2D = GetComponent<Rigidbody2D>();
+        ballRigidbody2D = GetComponent<Rigidbody2D>();
+        ImpulseBallStart();
+    }
 
+    //Metodo para impulsar la bola si esta en modo Autoimpulsada
+    private void ImpulseBallStart()
+    {
         if (StartedType.Auto == type)
         {
             Vector2 vector = new Vector2();
@@ -30,13 +26,13 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        this.startedParty();
-        this.FixedLoopBallInWall();
+        StartedParty();
+        FixedLoopBallInWall();
     }
 
-    public void startedParty()
+    //Metodo para iniciar la bola cuando se pulsa espacio
+    public void StartedParty()
     {
-        Rigidbody2D ballRigidbody2D = GetComponent<Rigidbody2D>();
         bool isPressSpace = Input.GetKey(KeyCode.Space);
 
         if (isPressSpace && !GameManager.IsStartParty)
@@ -47,10 +43,10 @@ public class Ball : MonoBehaviour
             GameManager.IsStartParty = true;
         }
     }
+
+    //Soluciona el bug que se queda la bola en el techo o paredes lateral
     public void FixedLoopBallInWall()
     {
-        Rigidbody2D ballRigidbody2D = GetComponent<Rigidbody2D>();
-
         //Paredes laterales
         if (GameManager.IsStartParty && Mathf.Abs(ballRigidbody2D.velocity.x) < 0.1f)
         {
@@ -75,11 +71,16 @@ public class Ball : MonoBehaviour
 
     public void Reset()
     {
+        //Pone en pause la bola
         GameManager.IsStartParty = false;
+        
+        //Genera una nueva bola en su posicion original
         GameObject prefab = Resources.Load<GameObject>(Prefab.Ball);
         Vector2 position = new Vector2(0, -4);
         GameObject go = Instantiate(prefab, position, Quaternion.identity);
         go.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
 
+        //Destrye la bola actual
+        Destroy(this);
     }
 }

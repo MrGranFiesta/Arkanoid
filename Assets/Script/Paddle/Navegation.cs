@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Navegation : MonoBehaviour
@@ -8,8 +6,7 @@ public class Navegation : MonoBehaviour
     [SerializeField] private GameObject WallRightObj;
     private Wall WallLeft;
     private Wall WallRight;
-
-    [SerializeField] private Ball started;
+    private float timeVelocity = 10f;
 
     private void Awake()
     {
@@ -17,10 +14,9 @@ public class Navegation : MonoBehaviour
         WallRight = WallRightObj.GetComponent<Wall>();
     }
 
-    private float timeVelocity = 10f;
-
     void Update()
     {
+        //Si el jugador no ha lanzado la bola no puede mover la pala
         if (GameManager.IsStartParty)
         {
             MovePaddle();
@@ -29,17 +25,22 @@ public class Navegation : MonoBehaviour
 
     private void MovePaddle()
     {
+        //Obtiene el movimiento horizontal del jugador
         float inputHorizontal = Input.GetAxisRaw("Horizontal");
 
+        //Calcula el movimeinto horizontal del jugador
         Vector3 vectorHorizontal = new Vector3();
         vectorHorizontal.y = 0;
-        vectorHorizontal.x = inputHorizontal * this.timeVelocity * Time.deltaTime;
-        this.transform.Translate(vectorHorizontal);
+        vectorHorizontal.x = inputHorizontal * timeVelocity * Time.deltaTime;
+        transform.Translate(vectorHorizontal);
     
-        float positionX = this.transform.position.x;
-        float limitLeft = (this.transform.localScale.x / 2) + WallLeft.getPositionX() + (WallLeft.getScaleX() / 2);
-        float limitRight = - (this.transform.localScale.x / 2) + WallRight.getPositionX() - (WallRight.getScaleX() / 2);
+        float positionX = transform.position.x;
+        //Calcula los limites
+        float limitLeft = (transform.localScale.x / 2) + WallLeft.getPositionX() + (WallLeft.getScaleX() / 2);
+        float limitRight = - (transform.localScale.x / 2) + WallRight.getPositionX() - (WallRight.getScaleX() / 2);
         positionX = Mathf.Clamp(positionX, limitLeft, limitRight);
-        this.transform.position = new Vector3(positionX, this.transform.position.y);
+        
+        //Mueve la posicion de la pala
+        transform.position = new Vector3(positionX, transform.position.y);
     }
 }

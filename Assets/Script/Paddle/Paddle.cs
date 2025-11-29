@@ -1,12 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 public class Paddle : MonoBehaviour
 {
+    //Actual PowerUp
     private IPowerUpType currentPowerUp;
 
+    //Inicia en una corrutina el powerUp
     public void StartPowerUp(IEnumerator routine)
     {
         StartCoroutine(routine);
@@ -14,6 +14,7 @@ public class Paddle : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        //Si colisiona un powerUp lo aplica en el objeto actual para que pueda ejecutarse las corrutinas
         if (collision.gameObject.CompareTag(Tag.PowerUp))
         {
             currentPowerUp = collision.gameObject.GetComponent<IPowerUpType>();
@@ -23,6 +24,7 @@ public class Paddle : MonoBehaviour
         }
     }
 
+    //Resetea la pala y el power up aplicado
     public void ResetPaddleAndPowerUp()
     {
         transform.position = new Vector2(0, -4.5f);
