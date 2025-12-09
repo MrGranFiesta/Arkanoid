@@ -2,45 +2,55 @@ using UnityEngine;
 
 public class Navegation : MonoBehaviour
 {
-    [SerializeField] private GameObject WallLeftObj;
-    [SerializeField] private GameObject WallRightObj;
-    private Wall WallLeft;
-    private Wall WallRight;
-    private float timeVelocity = 10f;
+    [SerializeField] private GameObject WallLeft;
+    [SerializeField] private GameObject WallRight;
 
-    private void Awake()
+    private float timeVelocity = 10f;
+    //TODO HACE FALTA MOVIFICAR CUANDO LA PALA ES ESALADA
+    private float limitLeft;
+    private float limitRight;
+
+    public void Awake()
     {
-        WallLeft = WallLeftObj.GetComponent<Wall>();
-        WallRight = WallRightObj.GetComponent<Wall>();
+        UpdateLimit();
     }
 
     void Update()
     {
         //Si el jugador no ha lanzado la bola no puede mover la pala
-        if (GameManager.IsStartParty)
+        if (GameManager.Instance.Player.IsStartParty)
         {
             MovePaddle();
         }
     }
 
+    public void UpdateLimit() {
+        limitLeft = GetLimitLeft();
+        limitRight = GetLimitRight();
+    }
+
+
     private void MovePaddle()
     {
         //Obtiene el movimiento horizontal del jugador
-        float inputHorizontal = Input.GetAxisRaw("Horizontal");
-
-        //Calcula el movimeinto horizontal del jugador
-        Vector3 vectorHorizontal = new Vector3();
-        vectorHorizontal.y = 0;
-        vectorHorizontal.x = inputHorizontal * timeVelocity * Time.deltaTime;
-        transform.Translate(vectorHorizontal);
+        float move = Input.GetAxisRaw(AxisUtils.Horizontal);
     
         float positionX = transform.position.x;
-        //Calcula los limites
-        float limitLeft = (transform.localScale.x / 2) + WallLeft.getPositionX() + (WallLeft.getScaleX() / 2);
-        float limitRight = - (transform.localScale.x / 2) + WallRight.getPositionX() - (WallRight.getScaleX() / 2);
+        positionX += (move * timeVelocity * Time.deltaTime);
         positionX = Mathf.Clamp(positionX, limitLeft, limitRight);
         
         //Mueve la posicion de la pala
         transform.position = new Vector3(positionX, transform.position.y);
+    }
+
+    private float GetLimitLeft()
+    {
+        return (transform.localScale.x / 2) + WallLeft.transform.position.x + (WallLeft.transform.localScale.x / 2);
+
+    }
+
+    private float GetLimitRight()
+    {
+        return - (transform.localScale.x / 2) + WallRight.transform.position.x - (WallRight.transform.localScale.x / 2);
     }
 }

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class LifeManager : MonoBehaviour
+public class LevelUiManager : MonoBehaviour
 {
     private TextMeshProUGUI _text;
 
@@ -10,9 +10,9 @@ public class LifeManager : MonoBehaviour
     {
         _text = GetComponent<TextMeshProUGUI>();
         //Crea escuchador de eventos
-        GameManager.OnLifeChanged.AddListener(UpdateText);
+        GameManager.Instance.EventManager.OnLevelChanged.AddListener(UpdateText);
         //Inicializa
-        _text.text = GameManager.Life.ToString();
+        _text.text = GameManager.Instance.Player.Level.ToString();
     }
 
     public void UpdateText(int text)

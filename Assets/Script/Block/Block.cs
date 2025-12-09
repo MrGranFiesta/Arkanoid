@@ -10,10 +10,9 @@ public class Block : MonoBehaviour
 
     public void Awake()
     {
+        GameManager.Instance.Player.RegisterBlock();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        //Da color al bloque
         spriteRenderer.color = blockData.color;
-        //Settea datos
         life = blockData.life;
         point = blockData.point;
     }
@@ -21,37 +20,30 @@ public class Block : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         //Al colisionar agrega puntos extras
-        GameManager.AddPoint(GetExtraPointByLifeBlock());
+        GameManager.Instance.Player.AddPoint(GetExtraPointByLifeBlock());
 
         //Quita 1 vida al bloque
         life--;
 
-        //Obtiene el numero de bloques
-        var count = GameObject.FindGameObjectsWithTag(Tag.Block).Length;
-
-        //Si es el ultimo bloque pasa el siguiente nivel
-        if (count == 1 && life == 0) {
-            GameManager.nextLevel();
-        }
-
-        //Si no tiene más vida destruye el bloque, sino reduce el color del bloque
-        if (life <= 0)
+        if (life > 0)
         {
-            DestroyBlock();
+            ReduceAlphaColor();
         }
         else
         {
-            ReduceAlphaColor();
+            DestroyBlock();
         }
     }
 
     private void DestroyBlock()
     {
+        GameManager.Instance.Player.DeleteBlock();
+        
         //Genera Power Up
         CheckGeneratePowerUp();
 
         //Obtiene puntos al destruir el bloque
-        GameManager.AddPoint(point);
+        GameManager.Instance.Player.AddPoint(point);
         Destroy(gameObject);
     }
 
@@ -64,26 +56,10 @@ public class Block : MonoBehaviour
 
     //Genera el powerUp
     private GameObject GetPowerUp() {
-        GameObject prefab = Resources.Load<GameObject>(GetRamdomPrefab());
-        return Instantiate(prefab, transform.position, Quaternion.identity);
-    }
+        string namePrefab = PowerUpManager.GetRamdomPrefab();
 
-    //Devuelve aleatoriamente un power Up
-    private string GetRamdomPrefab()
-    {
-        int randomPowerUp = Random.Range(0, 4);
-        switch (randomPowerUp)
-        {
-            case 0:
-                return Prefab.Ball;
-            case 1:
-                return Prefab.BigPaddle;
-            case 2:
-                return Prefab.Life;
-            case 3:
-                return Prefab.Ball3;
-            default: return null;
-        }
+            GameObject prefab = Resources.Load<GameObject>(namePrefab);
+            return Instantiate(prefab, transform.position, Quaternion.identity);
     }
 
     //Metodo que determina si se debe crear un powerUp

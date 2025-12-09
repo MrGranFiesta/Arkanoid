@@ -7,6 +7,6 @@ public class ReadOnlyTime : MonoBehaviour
     private void Awake()
     {
         //Inicializa y formatea texto
-        GetComponent<TextMeshProUGUI>().text = TimeUtils.FormatedTime(GameManager.Time);       
+        GetComponent<TextMeshProUGUI>().text = TimeUtils.FormatedTime(GameManager.Instance.Player.Time);       
     }
 }

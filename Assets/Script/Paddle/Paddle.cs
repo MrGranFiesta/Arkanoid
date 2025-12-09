@@ -14,12 +14,10 @@ public class Paddle : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        //Si colisiona un powerUp lo aplica en el objeto actual para que pueda ejecutarse las corrutinas
-        if (collision.gameObject.CompareTag(Tag.PowerUp))
+        currentPowerUp = collision.gameObject.GetComponent<IPowerUpType>();
+        if (currentPowerUp != null)
         {
-            currentPowerUp = collision.gameObject.GetComponent<IPowerUpType>();
             currentPowerUp.Apply(this);
-            
             Destroy(collision.gameObject);
         }
     }
@@ -27,7 +25,7 @@ public class Paddle : MonoBehaviour
     //Resetea la pala y el power up aplicado
     public void ResetPaddleAndPowerUp()
     {
-        transform.position = new Vector2(0, -4.5f);
+        transform.position = GameConstants.PositionPaddleOrigin;
         currentPowerUp?.Reset();
     }
 }

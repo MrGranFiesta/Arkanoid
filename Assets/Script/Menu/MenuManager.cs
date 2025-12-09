@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
     //Carga el LV 1 y resete el GameManager
     public void StartedGame()
     {
-        GameManager.Reset();
+        GameManager.Instance.Player.Reset();
         SceneManager.LoadScene(Scene.Lv1);
     }
 

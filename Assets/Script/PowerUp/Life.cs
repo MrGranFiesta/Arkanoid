@@ -5,6 +5,6 @@ public class Life : MonoBehaviour, IPowerUpType
 {
     public void Apply(Paddle paddle)
     {
-        GameManager.plusLife();
+        GameManager.Instance.Player.plusLife();
     }
 }

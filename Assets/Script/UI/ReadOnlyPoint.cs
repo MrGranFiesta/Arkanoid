@@ -7,6 +7,6 @@ public class ReadOnlyPoint : MonoBehaviour
     private void Awake()
     {
         //Inicializa texto
-        GetComponent<TextMeshProUGUI>().text = GameManager.Point.ToString();       
+        GetComponent<TextMeshProUGUI>().text = GameManager.Instance.Player.Point.ToString();       
     }
 }

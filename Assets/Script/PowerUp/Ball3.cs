@@ -11,12 +11,11 @@ public class Ball3 : MonoBehaviour, IPowerUpType
         CreateBallAndImpulse(-3, 3);
     }
 
-    //Crea bolas y las impulsas
     public void CreateBallAndImpulse(float x, float y)
     {
         GameObject ballPrefab = Resources.Load<GameObject>(Prefab.Ball);
         GameObject ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
         Rigidbody2D transformBall = ball.GetComponent<Rigidbody2D>();
-        transformBall.velocity = new Vector2(x, y);
+        transformBall.velocity = new Vector2(x, y).normalized * GameConstants.SpeedBall;
     }
 }
