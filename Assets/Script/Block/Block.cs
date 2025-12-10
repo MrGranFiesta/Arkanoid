@@ -27,6 +27,7 @@ public class Block : MonoBehaviour
 
         if (life > 0)
         {
+            GameManager.Instance.AudioManager.PlaySound(Resources.Load<AudioClip>("Sounds/Block1"));
             ReduceAlphaColor();
         }
         else
@@ -38,11 +39,10 @@ public class Block : MonoBehaviour
     private void DestroyBlock()
     {
         GameManager.Instance.Player.DeleteBlock();
-        
-        //Genera Power Up
+        GameManager.Instance.AudioManager.PlaySound(Resources.Load<AudioClip>("Sounds/Block2"));
+
         CheckGeneratePowerUp();
 
-        //Obtiene puntos al destruir el bloque
         GameManager.Instance.Player.AddPoint(point);
         Destroy(gameObject);
     }

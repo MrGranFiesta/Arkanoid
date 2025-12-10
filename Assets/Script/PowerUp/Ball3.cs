@@ -5,7 +5,7 @@ public class Ball3 : MonoBehaviour, IPowerUpType
 {
     public void Apply(Paddle paddle)
     {
-        //Crea 3 bolas en 3 direcciones
+        GameManager.Instance.AudioManager.PlaySound(Resources.Load<AudioClip>("Sounds/PowerUp"));
         CreateBallAndImpulse(3, 3);
         CreateBallAndImpulse(Random.Range(0.2f, -0.2f), 3);
         CreateBallAndImpulse(-3, 3);

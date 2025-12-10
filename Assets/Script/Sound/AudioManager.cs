@@ -1,20 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager
 {
-    private GameObject _parentPoling;
+    private GameObject _parentPooling;
+    private List<AudioSource> _audioSources = new List<AudioSource>();
 
-    // Start is called before the first frame update
-    void Start()
+    public AudioManager(GameObject parent)
     {
-        
+        _parentPooling = parent;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlaySound(AudioClip clip)
     {
-        
+        var audioSource = GetOrCreateAudioSource();
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    private AudioSource GetOrCreateAudioSource()
+    {
+        AudioSource audioSource = _audioSources.Where(x => x.isPlaying == false).FirstOrDefault();
+
+        if (audioSource == null)
+        {
+            audioSource = _parentPooling.AddComponent<AudioSource>();
+            _audioSources.Add(audioSource);
+        }
+
+        return audioSource;
     }
 }

@@ -46,6 +46,7 @@ public class Ball : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         FixedLoopBallInWall();
+        GameManager.Instance.AudioManager.PlaySound(Resources.Load<AudioClip>("Sounds/Ball"));
     }
 
     //Soluciona el bug que se queda la bola en el techo o paredes lateral

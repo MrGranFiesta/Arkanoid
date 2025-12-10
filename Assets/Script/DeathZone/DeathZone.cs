@@ -29,8 +29,9 @@ public class DeathZone : MonoBehaviour
             {
                 Destroy(item.gameObject);
             }
-            
+
             //Resta una vida
+            GameManager.Instance.AudioManager.PlaySound(Resources.Load<AudioClip>("Sounds/Damage"));
             GameManager.Instance.Player.MinusLife();
         }
         else

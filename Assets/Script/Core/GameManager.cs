@@ -1,32 +1,39 @@
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{   
-    public static GameManager Instance { get; private set; }
-    public Player Player { set; get; } = new Player();
-    public EventManager EventManager { set; get; } = new EventManager();
-    
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void Initialize()
-    {
-        if (Instance == null)
+{
+    private static GameManager _instance;
+    public static GameManager Instance { 
+        get
         {
-            GameObject go = new GameObject("GameManager");
-            Instance = go.AddComponent<GameManager>();
-            DontDestroyOnLoad(go);
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<GameManager>();
+                if (_instance == null)
+                {
+                    GameObject gm = new GameObject("GameManager");
+                    _instance = gm.AddComponent<GameManager>();
+                    _instance.AudioManager = new AudioManager(gm);
+                }
+            }
+            return _instance;
         }
     }
 
     public void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
         {
             Destroy(gameObject);
-            return;
         }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
+
+    public Player Player { set; get; } = new Player();
+    public EventManager EventManager { set; get; } = new EventManager();
+    public AudioManager AudioManager;
 }

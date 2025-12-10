@@ -7,6 +7,7 @@ public class BigPaddle : MonoBehaviour, IPowerUpType
     //Aplica el powerUp
     public void Apply(Paddle paddle)
     {
+        GameManager.Instance.AudioManager.PlaySound(Resources.Load<AudioClip>("Sounds/PowerUp"));
         paddle.StartPowerUp(ApplyPaddle(paddle));
     }
 
